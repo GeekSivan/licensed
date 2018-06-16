@@ -125,20 +125,21 @@ module Licensed
         # cache this so we run CLI commands as few times as possible
         return @bundler_spec if defined?(@bundler_spec)
 
-        p ""
-        p "Loading bundler with: #{ENV}"
+        puts ""
+        puts "Loading bundler with: #{ENV}"
 
         # set GEM_PATH to nil in the execution environment to pick up host
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
         path = Licensed::Shell.execute("bundle", "show", "bundler", env: { "GEM_PATH" => nil })
 
-        p "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+        puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+        puts "Files at #{path}: #{Dir[File.join(path, "*")]}"
 
         # get the gemspec path for the given bundler gem path
         path = File.expand_path("../../specifications/#{File.basename(path)}.gemspec", path)
-        p "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
-        p ""
+        puts "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
+        puts ""
 
         @bundler_spec = Gem::Specification.load(path)
       end
