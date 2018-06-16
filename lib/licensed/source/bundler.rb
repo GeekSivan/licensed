@@ -143,9 +143,13 @@ module Licensed
           path = File.expand_path("..", path)
         end
 
+        puts "path #{path}"
+
+        puts "gems/2.4.0/??? #{Dir[File.join(path, "gems", "2.4.0", "*")]}"
+
         path = File.join(path, "gems", ruby_version, "specifications", "bundler-#{bundler_version}.gemspec")
 
-        puts "lib/ruby/gems/??? #{Dir[File.join(path, "gems", "2.4.0", "*")]}"
+
 
         # puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
         # puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
