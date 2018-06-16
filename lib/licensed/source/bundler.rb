@@ -121,6 +121,7 @@ module Licensed
       # This is a hack to work around bundler not placing it's own spec at
       # `::Bundler.specs_path` when it's an explicit dependency
       def bundler_spec
+        
         # cache this so we run CLI commands as few times as possible
         return @bundler_spec if defined?(@bundler_spec)
 
