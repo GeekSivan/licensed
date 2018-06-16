@@ -4,6 +4,8 @@ begin
 rescue LoadError
 end
 
+# require "byebug"
+
 module Licensed
   module Source
     class Bundler
@@ -130,14 +132,20 @@ module Licensed
         # set GEM_PATH to nil in the execution environment to pick up host
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
-        path = Licensed::Shell.execute("bundle", "show", "bundler")
+        # byebug
+        path = Licensed::Shell.execute("which", "bundle").strip
+        version = Licensed::Shell.execute("bundle", "-v").split(" ").last.strip
 
-        puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
-        puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
-        puts "Bundler at #{Licensed::Shell.execute("which", "bundle")}"
+        path = File.expand_path("../..", path)
+        puts "lib/ruby/gems/??? #{Dir[File.join(path, "lib", "ruby", "gems", "*")]}"
+        path = File.join("lib/ruby/gems/#{File.basename(path)}/specifications/bundler-#{version}.gemspec")
+
+        # puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+        # puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
+        # puts "Bundler at #{Licensed::Shell.execute("which", "bundle")}"
 
         # get the gemspec path for the given bundler gem path
-        path = File.expand_path("../../specifications/#{File.basename(path)}.gemspec", path)
+        # path = File.expand_path("../../specifications/#{File.basename(path)}.gemspec", path)
         puts "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
         puts ""
 
