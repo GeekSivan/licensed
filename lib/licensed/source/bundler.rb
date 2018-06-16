@@ -145,7 +145,7 @@ module Licensed
 
         puts "path #{path}"
 
-        puts "gems/2.4.0/??? #{Dir[File.join(path, "gems", "2.4.0", "*")]}"
+        puts "gems/2.4.0/specifications/??? #{Dir[File.join(path, "gems", ruby_version, "specifications", "*")]}"
 
         path = File.join(path, "gems", ruby_version, "specifications", "bundler-#{bundler_version}.gemspec")
 
