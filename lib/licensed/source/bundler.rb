@@ -126,12 +126,11 @@ module Licensed
         return @bundler_spec if defined?(@bundler_spec)
 
         puts ""
-        puts "Loading bundler with: #{ENV.to_hash}"
 
         # set GEM_PATH to nil in the execution environment to pick up host
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
-        path = Licensed::Shell.execute("bundle", "show", "bundler", env: { "GEM_PATH" => nil })
+        path = Licensed::Shell.execute("bundle", "show", "bundler")
 
         puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
         puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
