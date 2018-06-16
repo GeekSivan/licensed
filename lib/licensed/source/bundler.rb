@@ -133,13 +133,19 @@ module Licensed
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
         # byebug
-        path = Licensed::Shell.execute("which", "bundle").strip
         ruby_version = Licensed::Shell.execute("ruby", "-v").strip[/ruby (\d+\.\d+\.\d+).*/, 1]
         bundler_version = ::Bundler.with_original_env { Licensed::Shell.execute("bundle", "-v").split(" ").last.strip }
+        path = ::Bundler.with_original_env { Licensed::Shell.execute("bundle", "show", "bundler").strip }
 
-        path = File.expand_path("../..", path)
-        puts "lib/ruby/gems/??? #{Dir[File.join(path, "lib", "ruby", "gems", "*")]}"
-        path = File.join("lib/ruby/gems/#{ruby_version}/specifications/bundler-#{bundler_version}.gemspec")
+        puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+
+        while File.basename(path) != "ruby" do
+          path = File.expand_path("..", path)
+        end
+
+        path = File.join(path, "gems", ruby_version, "specifications", "bundler-#{bundler_version}.gemspec")
+
+        puts "lib/ruby/gems/??? #{Dir[File.join(path, "gems", "2.4.0", "*")]}"
 
         # puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
         # puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
