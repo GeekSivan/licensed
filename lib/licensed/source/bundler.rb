@@ -121,20 +121,24 @@ module Licensed
       # This is a hack to work around bundler not placing it's own spec at
       # `::Bundler.specs_path` when it's an explicit dependency
       def bundler_spec
-        
+
         # cache this so we run CLI commands as few times as possible
         return @bundler_spec if defined?(@bundler_spec)
+
+        p ""
+        p "Loading bundler with: #{ENV.merge({ "GEM_PATH" => nil })}"
 
         # set GEM_PATH to nil in the execution environment to pick up host
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
         path = Licensed::Shell.execute("bundle", "show", "bundler", env: { "GEM_PATH" => nil })
 
-        @config.ui.debug "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+        p "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
 
         # get the gemspec path for the given bundler gem path
         path = File.expand_path("../../specifications/#{File.basename(path)}.gemspec", path)
-        @config.ui.debug "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
+        p "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
+        p ""
 
         @bundler_spec = Gem::Specification.load(path)
       end
