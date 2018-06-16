@@ -134,11 +134,12 @@ module Licensed
         # ruby-packer built executable
         # byebug
         path = Licensed::Shell.execute("which", "bundle").strip
-        version = Licensed::Shell.execute("bundle", "-v").split(" ").last.strip
+        ruby_version = Licensed::Shell.execute("ruby", "-v").strip[/ruby (\d+\.\d+\.\d+).*/, 1]
+        bundler_version = ::Bundler.with_original_env { Licensed::Shell.execute("bundle", "-v").split(" ").last.strip }
 
         path = File.expand_path("../..", path)
         puts "lib/ruby/gems/??? #{Dir[File.join(path, "lib", "ruby", "gems", "*")]}"
-        path = File.join("lib/ruby/gems/#{File.basename(path)}/specifications/bundler-#{version}.gemspec")
+        path = File.join("lib/ruby/gems/#{ruby_version}/specifications/bundler-#{bundler_version}.gemspec")
 
         # puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
         # puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
@@ -191,7 +192,8 @@ module Licensed
       # helper to clear all bundler environment around a yielded block
       def with_local_configuration
         # force bundler to use the local gem file
-        original_bundle_gemfile, ENV["BUNDLE_GEMFILE"] = ENV["BUNDLE_GEMFILE"], gemfile_path.to_s
+        original_bundle_gemfile = ENV["BUNDLE_GEMFILE"]
+        ENV["BUNDLE_GEMFILE"] = gemfile_path.to_s
 
         # reset all bundler configuration
         ::Bundler.reset!
