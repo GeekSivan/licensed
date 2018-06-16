@@ -134,7 +134,7 @@ module Licensed
         path = Licensed::Shell.execute("bundle", "show", "bundler", env: { "GEM_PATH" => nil })
 
         puts "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
-        puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*")]}"
+        puts "Files at /home/travis/.rvm #{Dir["/home/travis/.rvm/*"]}"
         puts "Bundler at #{Licensed::Shell.execute("which", "bundle")}"
 
         # get the gemspec path for the given bundler gem path
