@@ -128,8 +128,12 @@ module Licensed
         # information.  this is a specific hack for running from a
         # ruby-packer built executable
         path = Licensed::Shell.execute("bundle", "show", "bundler", env: { "GEM_PATH" => nil })
+
+        @config.ui.debug "evaluating bundler gem path #{path}.  Exist? #{File.exist?(path)}"
+
         # get the gemspec path for the given bundler gem path
         path = File.expand_path("../../specifications/#{File.basename(path)}.gemspec", path)
+        @config.ui.debug "evaluating bundler spec path #{path}.  Exist? #{File.exist?(path)}"
 
         @bundler_spec = Gem::Specification.load(path)
       end
