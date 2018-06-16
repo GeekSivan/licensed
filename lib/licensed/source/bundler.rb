@@ -126,7 +126,7 @@ module Licensed
         return @bundler_spec if defined?(@bundler_spec)
 
         p ""
-        p "Loading bundler with: #{ENV.merge({ "GEM_PATH" => nil })}"
+        p "Loading bundler with: #{ENV}"
 
         # set GEM_PATH to nil in the execution environment to pick up host
         # information.  this is a specific hack for running from a
